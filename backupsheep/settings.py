@@ -41,7 +41,7 @@ DEBUG = config["DJANGO_DEBUG"]
 DJANGO_SERVER = config["DJANGO_SERVER"]
 ALLOWED_HOSTS = [config["DJANGO_ALLOWED_HOSTS"]]
 HTTPS_ENABLED = False
-CSRF_TRUSTED_ORIGINS = ["https://backupsheep.io"]
+CSRF_TRUSTED_ORIGINS = ["http://localhost:8000"]
 # Application definition
 
 INSTALLED_APPS = [
@@ -61,7 +61,7 @@ INSTALLED_APPS = [
     'loginas',
     'widget_tweaks',
     'apps',
-
+    'apps.console',
 ]
 
 MIDDLEWARE = [
@@ -243,6 +243,20 @@ LOGIN_REQUIRED_IGNORE_PATHS = [
     r'/error/',
 ]
 
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
 
 # POSTMARK
 POSTMARK_API_KEY = config["POSTMARK_API_KEY"]

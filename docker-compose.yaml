@@ -1,0 +1,47 @@
+name: backupsheep
+
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    networks:
+      - backend
+    restart: always
+
+  web:
+    build: .
+    volumes:
+      - .:/code
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    networks:
+      - backend
+    restart: on-failure
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${SUPERUSER_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${SUPERUSER_PASSWORD}
+    volumes:
+      - pgadmin:/root/.pgadmin
+    ports:
+      - '5050:80'
+    networks:
+      - backend
+    depends_on:
+      - db
+
+networks:
+  backend:
+
+volumes:
+  postgres_data:
+  pgadmin:

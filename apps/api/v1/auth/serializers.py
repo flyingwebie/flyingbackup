@@ -33,6 +33,8 @@ class APIAuthLoginSerializer(serializers.Serializer):
     def validate_password(self, value):
         initial_values = self.get_initial()
 
+        if "email" not in initial_values:
+            raise serializers.ValidationError("Email is required.")
         email = initial_values["email"]
 
         if CoreMember.objects.filter(user__email__iexact=email).exists():
